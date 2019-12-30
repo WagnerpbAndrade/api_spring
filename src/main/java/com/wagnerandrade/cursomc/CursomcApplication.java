@@ -1,8 +1,12 @@
 package com.wagnerandrade.cursomc;
 
 import com.wagnerandrade.cursomc.api.model.Categoria;
+import com.wagnerandrade.cursomc.api.model.Cidade;
+import com.wagnerandrade.cursomc.api.model.Estado;
 import com.wagnerandrade.cursomc.api.model.Produto;
 import com.wagnerandrade.cursomc.api.repositories.CategoriaRepository;
+import com.wagnerandrade.cursomc.api.repositories.CidadeRepository;
+import com.wagnerandrade.cursomc.api.repositories.EstadoRepository;
 import com.wagnerandrade.cursomc.api.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +23,12 @@ public class CursomcApplication implements CommandLineRunner {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private EstadoRepository estadoRepository;
+
+    @Autowired
+    private CidadeRepository cidadeRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(CursomcApplication.class, args);
@@ -40,8 +50,19 @@ public class CursomcApplication implements CommandLineRunner {
         p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
         p3.getCategorias().addAll(Arrays.asList(cat1));
 
-        this.categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+        Estado est1 = new Estado(null, "Minas Gerais");
+        Estado est2 = new Estado(null, "São Paulo");
 
+        Cidade c1 = new Cidade(null, "Uberlândia", est1);
+        Cidade c2 = new Cidade(null, "São Paulo", est2);
+        Cidade c3 = new Cidade(null, "Campinas", est2);
+
+        est1.getCidades().addAll(Arrays.asList(c1));
+        est2.getCidades().addAll(Arrays.asList(c2, c3));
+
+        this.categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
         this.produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+        this.estadoRepository.saveAll(Arrays.asList(est1, est2));
+        this.cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
     }
 }
