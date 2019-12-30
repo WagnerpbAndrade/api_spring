@@ -1,5 +1,6 @@
 package com.wagnerandrade.cursomc.api.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Cidade implements Serializable {
 
     private String nome;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "estado_id")
     private Estado estado;

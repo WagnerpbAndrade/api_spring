@@ -1,5 +1,6 @@
 package com.wagnerandrade.cursomc.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class Estado implements Serializable {
 
     private String nome;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "estado")
     private List<Cidade> cidades = new ArrayList<>();
 
