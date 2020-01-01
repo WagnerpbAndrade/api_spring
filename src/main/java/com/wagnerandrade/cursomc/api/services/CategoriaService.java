@@ -29,4 +29,8 @@ public class CategoriaService {
 
         return this.repository.save(categoria);
     }
+
+    public Categoria update(Categoria categoria) {
+        return this.repository.save(categoria);
+    }
 }

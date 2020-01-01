@@ -36,6 +36,14 @@ public class CategoriaController {
         return ResponseEntity.created(getUri(categoria)).build();
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Categoria categoria) {
+        categoria.setId(id);
+        categoria = this.service.update(categoria);
+
+        return ResponseEntity.noContent().build();
+    }
+
     private URI getUri(Categoria categoria) {
         return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(categoria.getId()).toUri();
