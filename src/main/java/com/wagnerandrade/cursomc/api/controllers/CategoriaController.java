@@ -53,4 +53,13 @@ public class CategoriaController {
         return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(categoria.getId()).toUri();
     }
+
+    @GetMapping(value = "/page")
+    public ResponseEntity getPage(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+            @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy) {
+        return ResponseEntity.ok().body(this.service.findPage(page, linesPerPage, direction, orderBy));
+    }
 }
