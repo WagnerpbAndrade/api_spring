@@ -19,14 +19,12 @@ public class CategoriaController {
 
     @GetMapping()
     public ResponseEntity getAll() {
-        return ResponseEntity.ok(this.service.getAll());
+        return ResponseEntity.ok().body(this.service.getAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
-        CategoriaDTO categoria = this.service.getById(id);
-
-        return ResponseEntity.ok(categoria);
+        return ResponseEntity.ok().body(this.service.getById(id));
     }
 
     @PostMapping

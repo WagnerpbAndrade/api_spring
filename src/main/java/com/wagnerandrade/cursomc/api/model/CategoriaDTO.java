@@ -4,17 +4,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.Serializable;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CategoriaDTO {
+public class CategoriaDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String nome;
-    private Double preco;
-    private List<Produto> produtos;
 
     private CategoriaDTO() {}
 

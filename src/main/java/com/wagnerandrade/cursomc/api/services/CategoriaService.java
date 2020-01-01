@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoriaService {
@@ -18,12 +19,12 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository repository;
 
-    public CategoriaDTO getById(Long id) {
-        return this.repository.findById(id).map(CategoriaDTO::create).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
+    public Categoria getById(Long id) {
+        return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
     }
 
-    public List<Categoria> getAll() {
-        return this.repository.findAll();
+    public List<CategoriaDTO> getAll() {
+        return this.repository.findAll().stream().map(CategoriaDTO::create).collect(Collectors.toList());
     }
 
     public Categoria insert(Categoria categoria) {
@@ -40,7 +41,7 @@ public class CategoriaService {
         try{
             this.repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntregratyException("Não é possível excluir uma categoria que possui produtos");
+            throw new DataIntregratyException("Não é possível excluir uma cat");
         }
     }
 }
