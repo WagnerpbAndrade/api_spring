@@ -4,6 +4,7 @@ import com.wagnerandrade.cursomc.api.infra.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Categoria;
 import com.wagnerandrade.cursomc.api.model.CategoriaDTO;
 import com.wagnerandrade.cursomc.api.repositories.CategoriaRepository;
+import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,11 @@ public class CategoriaService {
 
     public List<Categoria> getAll() {
         return this.repository.findAll();
+    }
+
+    public Categoria insert(Categoria categoria) {
+        Assert.notNull("id", "Não foi possível inserir a categoria");
+
+        return this.repository.save(categoria);
     }
 }
