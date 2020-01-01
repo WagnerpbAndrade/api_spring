@@ -37,22 +37,48 @@ public class ExceptionConfig extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Error("Acesso negado"));
     }
 
+    @ExceptionHandler({
+            DataIntregratyException.class
+    })
+    public ResponseEntity<ExceptionError> dataIntegraty(DataIntregratyException e, HttpStatus httpStatus) {
+
+        ExceptionError error = new ExceptionError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return new ResponseEntity<>(new ExceptionError("Operação não permitida"), HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(new ExceptionError(
+                HttpStatus.METHOD_NOT_ALLOWED.value(),
+                "Operação não permitida", System.currentTimeMillis()),
+                HttpStatus.METHOD_NOT_ALLOWED);
     }
 
 }
 
 class ExceptionError implements Serializable {
-    private String error;
+    private static final long serialVersionUID = 1L;
 
-    public ExceptionError(String error) {
+    private Integer status;
+    private String error;
+    private Long timeStamp;
+
+    public ExceptionError(Integer status, String error, Long timeStamp) {
+        this.status = status;
         this.error = error;
+        this.timeStamp = timeStamp;
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 
     public String getError() {
         return error;
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
     }
 }
 

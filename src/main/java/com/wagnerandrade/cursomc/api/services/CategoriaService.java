@@ -1,11 +1,13 @@
 package com.wagnerandrade.cursomc.api.services;
 
+import com.wagnerandrade.cursomc.api.infra.exception.DataIntregratyException;
 import com.wagnerandrade.cursomc.api.infra.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Categoria;
 import com.wagnerandrade.cursomc.api.model.CategoriaDTO;
 import com.wagnerandrade.cursomc.api.repositories.CategoriaRepository;
 import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,5 +34,13 @@ public class CategoriaService {
 
     public Categoria update(Categoria categoria) {
         return this.repository.save(categoria);
+    }
+
+    public void delete(Long id) {
+        try{
+            this.repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntregratyException("Não é possível excluir uma categoria que possui produtos");
+        }
     }
 }
