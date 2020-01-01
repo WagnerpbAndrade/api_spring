@@ -1,5 +1,6 @@
 package com.wagnerandrade.cursomc.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.wagnerandrade.cursomc.api.model.enums.EstadoPagamento;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public abstract class Pagamento implements Serializable {
 
     private Integer estado;
 
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId
