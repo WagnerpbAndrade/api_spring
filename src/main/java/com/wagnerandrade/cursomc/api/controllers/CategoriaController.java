@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -28,18 +29,23 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity insert(@RequestBody Categoria categoria) {
+    public ResponseEntity insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
+        Categoria categoria = this.service.fromDTO(categoriaDTO);
         categoria = this.service.insert(categoria);
 
         return ResponseEntity.created(getUri(categoria)).build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Categoria categoria) {
+    public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody CategoriaDTO categoriaDTO) {
+        Categoria categoria = this.service.fromDTO(categoriaDTO);
         categoria.setId(id);
+
         categoria = this.service.update(categoria);
 
-        return ResponseEntity.ok(categoria);
+        return categoria != null ?
+                ResponseEntity.ok(categoria) :
+                ResponseEntity.notFound().build();
     }
 
     @DeleteMapping(value = "/{id}")

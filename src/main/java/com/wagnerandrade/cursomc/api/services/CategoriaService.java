@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +51,9 @@ public class CategoriaService {
     public Page<CategoriaDTO> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
         PageRequest pages = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return this.repository.findAll(pages).map(CategoriaDTO::create);
+    }
+
+    public Categoria fromDTO(CategoriaDTO objDTO) {
+        return new Categoria(objDTO.getId(), objDTO.getNome());
     }
 }
