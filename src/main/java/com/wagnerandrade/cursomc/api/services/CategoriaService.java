@@ -1,7 +1,7 @@
 package com.wagnerandrade.cursomc.api.services;
 
-import com.wagnerandrade.cursomc.api.infra.exception.DataIntregratyException;
-import com.wagnerandrade.cursomc.api.infra.exception.ObjectNotFoundException;
+import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
+import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Categoria;
 import com.wagnerandrade.cursomc.api.model.CategoriaDTO;
 import com.wagnerandrade.cursomc.api.repositories.CategoriaRepository;
@@ -44,7 +44,7 @@ public class CategoriaService {
         try{
             this.repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntregratyException("Não é possível excluir uma cat");
+            throw new DataIntegrityException("Não é possível excluir uma cat");
         }
     }
 

@@ -1,6 +1,6 @@
 package com.wagnerandrade.cursomc.api.services;
 
-import com.wagnerandrade.cursomc.api.infra.exception.ObjectNotFoundException;
+import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Pedido;
 import com.wagnerandrade.cursomc.api.repositories.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

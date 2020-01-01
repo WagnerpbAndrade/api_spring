@@ -1,4 +1,4 @@
-package com.wagnerandrade.cursomc.api.infra.exception;
+package com.wagnerandrade.cursomc.api.cotrollers.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
