@@ -6,10 +6,12 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Entity
 @Data
+@Entity
 public class Produto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,11 +33,23 @@ public class Produto implements Serializable {
     )
     private List<Categoria> categorias = new ArrayList<>();
 
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itens = new HashSet<>();
+
     public Produto() {}
 
     public Produto(Long id, String nome, Double preco) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public List<Pedido> getPedidos() {
+        List<Pedido> lista = new ArrayList<>();
+        for (ItemPedido item : this.itens) {
+            lista.add(item.getPedido());
+        }
+
+        return lista;
     }
 }
