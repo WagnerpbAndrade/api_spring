@@ -3,7 +3,7 @@ package com.wagnerandrade.cursomc.api.services;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Categoria;
-import com.wagnerandrade.cursomc.api.model.CategoriaDTO;
+import com.wagnerandrade.cursomc.api.model.dto.CategoriaDTO;
 import com.wagnerandrade.cursomc.api.repositories.CategoriaRepository;
 import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;

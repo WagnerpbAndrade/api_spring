@@ -1,7 +1,7 @@
 package com.wagnerandrade.cursomc.api.controllers;
 
 import com.wagnerandrade.cursomc.api.model.Categoria;
-import com.wagnerandrade.cursomc.api.model.CategoriaDTO;
+import com.wagnerandrade.cursomc.api.model.dto.CategoriaDTO;
 import com.wagnerandrade.cursomc.api.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

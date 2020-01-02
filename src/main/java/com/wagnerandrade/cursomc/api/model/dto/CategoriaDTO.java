@@ -1,6 +1,7 @@
-package com.wagnerandrade.cursomc.api.model;
+package com.wagnerandrade.cursomc.api.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.wagnerandrade.cursomc.api.model.Categoria;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;

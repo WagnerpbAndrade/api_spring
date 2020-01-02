@@ -1,5 +1,6 @@
-package com.wagnerandrade.cursomc.api.model;
+package com.wagnerandrade.cursomc.api.model.dto;
 
+import com.wagnerandrade.cursomc.api.model.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

@@ -1,7 +1,8 @@
 package com.wagnerandrade.cursomc.api.controllers;
 
 import com.wagnerandrade.cursomc.api.model.Cliente;
-import com.wagnerandrade.cursomc.api.model.ClienteDTO;
+import com.wagnerandrade.cursomc.api.model.dto.ClienteDTO;
+import com.wagnerandrade.cursomc.api.model.dto.ClienteNewDTO;
 import com.wagnerandrade.cursomc.api.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,9 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody ClienteDTO clienteDTO) {
-        Cliente cliente = this.service.fromDTO(clienteDTO);
-        //cliente = this.service.insert(cliente);
+    public ResponseEntity insert(@Valid @RequestBody ClienteNewDTO clienteNewDTO) {
+        Cliente cliente = this.service.fromDTO(clienteNewDTO);
+        cliente = this.service.insert(cliente);
 
         return ResponseEntity.created(getUri(cliente)).build();
     }

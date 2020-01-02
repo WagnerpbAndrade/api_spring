@@ -2,15 +2,21 @@ package com.wagnerandrade.cursomc.api.services;
 
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
+import com.wagnerandrade.cursomc.api.model.Cidade;
 import com.wagnerandrade.cursomc.api.model.Cliente;
-import com.wagnerandrade.cursomc.api.model.ClienteDTO;
+import com.wagnerandrade.cursomc.api.model.Endereco;
+import com.wagnerandrade.cursomc.api.model.dto.ClienteDTO;
+import com.wagnerandrade.cursomc.api.model.dto.ClienteNewDTO;
+import com.wagnerandrade.cursomc.api.model.enums.TipoCliente;
 import com.wagnerandrade.cursomc.api.repositories.ClienteRepository;
+import com.wagnerandrade.cursomc.api.repositories.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,12 +27,23 @@ public class ClienteService {
     @Autowired
     private ClienteRepository repository;
 
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+
     public Cliente getById(Long id) {
         return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
     }
 
     public List<ClienteDTO> getAll() {
         return this.repository.findAll().stream().map(ClienteDTO::create).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Cliente insert(Cliente obj) {
+        obj.setId(null);
+        obj = this.repository.save(obj);
+        this.enderecoRepository.saveAll(obj.getEnderecos());
+        return obj;
     }
 
     public Cliente update(Cliente categoria) {
@@ -48,8 +65,23 @@ public class ClienteService {
         return this.repository.findAll(pages).map(ClienteDTO::create);
     }
 
-    public Cliente fromDTO(ClienteDTO objDTO) {
-        return new Cliente(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), null, null);
+    public Cliente fromDTO(ClienteDTO objDto) {
+        return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null, null);
+    }
+
+    public Cliente fromDTO(ClienteNewDTO objDto) {
+        Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()), null);
+        Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
+        Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+        cli.getEnderecos().add(end);
+        cli.getTelefones().add(objDto.getTelefone1());
+        if (objDto.getTelefone2()!=null) {
+            cli.getTelefones().add(objDto.getTelefone2());
+        }
+        if (objDto.getTelefone3()!=null) {
+            cli.getTelefones().add(objDto.getTelefone3());
+        }
+        return cli;
     }
 
     private void updateData(Cliente newObj, Cliente categoria) {
