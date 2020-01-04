@@ -1,6 +1,7 @@
 package com.wagnerandrade.cursomc.api.model.dto;
 
 import com.wagnerandrade.cursomc.api.model.Cliente;
+import com.wagnerandrade.cursomc.api.services.validation.ClienteUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
+@ClienteUpdate
 public class ClienteDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
