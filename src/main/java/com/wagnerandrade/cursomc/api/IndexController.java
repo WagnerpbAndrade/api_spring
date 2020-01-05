@@ -10,6 +10,6 @@ public class IndexController {
 
     @GetMapping
     public String index() {
-        return "Curso Modelo Conceitual REST";
+        return "Curso Modelo Conceitual REST - Heroku";
     }
 }
