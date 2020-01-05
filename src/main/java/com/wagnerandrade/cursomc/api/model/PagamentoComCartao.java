@@ -1,5 +1,6 @@
 package com.wagnerandrade.cursomc.api.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.wagnerandrade.cursomc.api.model.enums.EstadoPagamento;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import javax.persistence.Entity;
 
 @Entity
 @Data
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 
     private static final long serialVersionUID = 1L;
