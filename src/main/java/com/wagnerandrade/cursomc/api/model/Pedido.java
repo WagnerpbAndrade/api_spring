@@ -5,8 +5,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 @Data
@@ -53,5 +56,22 @@ public class Pedido implements Serializable {
         }
 
         return soma;
+    }
+
+    @Override
+    public String toString() {
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Pedido número: ").append(getId());
+        sb.append(", Instante: ").append(sdf.format(getInstante()));
+        sb.append(", Cliente: ").append(getCliente().getNome());
+        sb.append(", Situação do pagamento: ").append(getPagamento().getEstado().getDescricao());
+        sb.append("\nDetalhes:\n");
+        for (ItemPedido itens : this.getItens()){
+            sb.append(itens.toString());
+        }
+        sb.append("Valor total: ").append(nf.format(getValorTotal()));
+        return sb.toString();
     }
 }
