@@ -2,6 +2,7 @@ package com.wagnerandrade.cursomc.api.services;
 
 import com.wagnerandrade.cursomc.api.model.*;
 import com.wagnerandrade.cursomc.api.model.enums.EstadoPagamento;
+import com.wagnerandrade.cursomc.api.model.enums.Perfil;
 import com.wagnerandrade.cursomc.api.model.enums.TipoCliente;
 import com.wagnerandrade.cursomc.api.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,15 +105,22 @@ public class DBService {
         est1.getCidades().addAll(Arrays.asList(c1));
         est2.getCidades().addAll(Arrays.asList(c2, c3));
 
-        Cliente cli1 = new Cliente(null, "Maria Silva", "wagnerpbandrade@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, this.encoder.encode("123"));
+        Cliente cli1 = new Cliente(null, "Maria Silva", "andradewaguin@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, this.encoder.encode("123"));
         cli1.getTelefones().addAll(Arrays.asList("27363323", "9383393"));
 
-        this.clienteRepository.saveAll(Arrays.asList(cli1));
+        Cliente cli2 = new Cliente(null, "Wagner Andrade", "wagnerpbandrade@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, this.encoder.encode("123"));
+        cli1.getTelefones().addAll(Arrays.asList("22997462452", "22996211039"));
+        cli2.addPerfil(Perfil.ADMIN);
 
         Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "38220834", cli1, c1);
         Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 900", "Centro", "38777012", cli1, c2);
+        Endereco e3 = new Endereco(null, "Avenidas Marechal Campos", "334", null, "Santos Dummont", "38777012", cli1, c2);
 
-        this.enderecoRepository.saveAll(Arrays.asList(e1, e2));
+        cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
+        cli2.getEnderecos().addAll(Arrays.asList(e3));
+
+        this.clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+        this.enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
