@@ -1,10 +1,13 @@
 package com.wagnerandrade.cursomc.api.services;
 
+import com.wagnerandrade.cursomc.api.cotrollers.exception.AuthorizationException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Categoria;
 import com.wagnerandrade.cursomc.api.model.dto.CategoriaDTO;
+import com.wagnerandrade.cursomc.api.model.enums.Perfil;
 import com.wagnerandrade.cursomc.api.repositories.CategoriaRepository;
+import com.wagnerandrade.cursomc.api.security.UserSS;
 import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,6 +26,11 @@ public class CategoriaService {
     private CategoriaRepository repository;
 
     public Categoria getById(Long id) {
+        UserSS user = UserService.authenticated();
+        if (user == null || ! user.hasRole(Perfil.ADMIN) && ! id.equals(user.getId())) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
         return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
     }
 

@@ -1,5 +1,6 @@
 package com.wagnerandrade.cursomc.api.services.exception;
 
+import com.wagnerandrade.cursomc.api.cotrollers.exception.AuthorizationException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -53,12 +54,12 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
     }
 
-//    @ExceptionHandler(AuthorizationException.class)
-//    public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
-//
-//        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Acesso negado", e.getMessage(), request.getRequestURI());
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
-//    }
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Acesso negado", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+    }
 
 //    @ExceptionHandler(FileException.class)
 //    public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request) {
