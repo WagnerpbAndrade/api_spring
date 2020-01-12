@@ -43,9 +43,6 @@ public class DBService {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
     public void instantiateDatabase() throws ParseException {
         Categoria cat1 = new Categoria(null, "Informática");
         Categoria cat2 = new Categoria(null, "Escritório");
@@ -105,10 +102,10 @@ public class DBService {
         est1.getCidades().addAll(Arrays.asList(c1));
         est2.getCidades().addAll(Arrays.asList(c2, c3));
 
-        Cliente cli1 = new Cliente(null, "Maria Silva", "andradewaguin@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, this.encoder.encode("123"));
+        Cliente cli1 = new Cliente(null, "Maria Silva", "andradewaguin@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, new BCryptPasswordEncoder().encode("123"));
         cli1.getTelefones().addAll(Arrays.asList("27363323", "9383393"));
 
-        Cliente cli2 = new Cliente(null, "Wagner Andrade", "wagnerpbandrade@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, this.encoder.encode("123"));
+        Cliente cli2 = new Cliente(null, "Wagner Andrade", "wagnerpbandrade@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, new BCryptPasswordEncoder().encode("123"));
         cli1.getTelefones().addAll(Arrays.asList("22997462452", "22996211039"));
         cli2.addPerfil(Perfil.ADMIN);
 

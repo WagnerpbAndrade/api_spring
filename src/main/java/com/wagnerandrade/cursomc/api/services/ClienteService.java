@@ -38,6 +38,10 @@ public class ClienteService {
         return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
     }
 
+    public Cliente getByEmail(String email) {
+        return this.repository.findByEmail(email);
+    }
+
     public List<ClienteDTO> getAll() {
         return this.repository.findAll().stream().map(ClienteDTO::create).collect(Collectors.toList());
     }
@@ -74,7 +78,7 @@ public class ClienteService {
     }
 
     public Cliente fromDTO(ClienteNewDTO objDto) {
-        Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()), this.encoder.encode(objDto.getSenha()));
+        Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()), encoder.encode(objDto.getSenha()));
         Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
         Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
         cli.getEnderecos().add(end);
