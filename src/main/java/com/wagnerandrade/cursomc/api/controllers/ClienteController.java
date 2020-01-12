@@ -6,6 +6,7 @@ import com.wagnerandrade.cursomc.api.model.dto.ClienteNewDTO;
 import com.wagnerandrade.cursomc.api.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +25,7 @@ public class ClienteController {
         return ResponseEntity.ok(this.service.getById(id));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping()
     public ResponseEntity getAll() {
         return ResponseEntity.ok().body(this.service.getAll());
@@ -49,6 +51,7 @@ public class ClienteController {
                 ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
         this.service.delete(id);
@@ -61,6 +64,7 @@ public class ClienteController {
                 .buildAndExpand(cliente.getId()).toUri();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/page")
     public ResponseEntity getPage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,

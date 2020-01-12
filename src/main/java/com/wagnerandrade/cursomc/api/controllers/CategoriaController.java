@@ -5,6 +5,7 @@ import com.wagnerandrade.cursomc.api.model.dto.CategoriaDTO;
 import com.wagnerandrade.cursomc.api.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,6 +29,7 @@ public class CategoriaController {
         return ResponseEntity.ok().body(this.service.getById(id));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
         Categoria categoria = this.service.fromDTO(categoriaDTO);
@@ -36,6 +38,7 @@ public class CategoriaController {
         return ResponseEntity.created(getUri(categoria)).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody CategoriaDTO categoriaDTO) {
         Categoria categoria = this.service.fromDTO(categoriaDTO);
@@ -48,6 +51,7 @@ public class CategoriaController {
                 ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
         this.service.delete(id);
