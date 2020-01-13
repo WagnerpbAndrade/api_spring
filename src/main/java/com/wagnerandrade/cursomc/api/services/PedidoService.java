@@ -1,15 +1,18 @@
 package com.wagnerandrade.cursomc.api.services;
 
+import com.wagnerandrade.cursomc.api.cotrollers.exception.AuthorizationException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
-import com.wagnerandrade.cursomc.api.model.ItemPedido;
-import com.wagnerandrade.cursomc.api.model.PagamentoComBoleto;
-import com.wagnerandrade.cursomc.api.model.Pedido;
-import com.wagnerandrade.cursomc.api.model.Produto;
+import com.wagnerandrade.cursomc.api.model.*;
+import com.wagnerandrade.cursomc.api.model.dto.CategoriaDTO;
 import com.wagnerandrade.cursomc.api.model.enums.EstadoPagamento;
 import com.wagnerandrade.cursomc.api.repositories.ItemPedidoRepository;
 import com.wagnerandrade.cursomc.api.repositories.PagamentoRepository;
 import com.wagnerandrade.cursomc.api.repositories.PedidoRepository;
+import com.wagnerandrade.cursomc.api.security.UserSS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,5 +69,17 @@ public class PedidoService {
         this.itemPedidoRepository.saveAll(obj.getItens());
         this.emailService.sendOrderConfirmationHtmlEmail(obj);
         return obj;
+    }
+
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
+        UserSS user = UserService.authenticated();
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado");
+        }
+        PageRequest pages = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Cliente cliente = this.clienteService.getById(user.getId());
+
+        return this.repository.findByCliente(cliente, pages);
+
     }
 }
