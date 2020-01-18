@@ -1,6 +1,7 @@
 package com.wagnerandrade.cursomc.api.services;
 
 import com.sun.org.apache.xpath.internal.operations.Mult;
+import com.wagnerandrade.cursomc.api.cotrollers.exception.AuthorizationException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Cidade;
@@ -8,9 +9,11 @@ import com.wagnerandrade.cursomc.api.model.Cliente;
 import com.wagnerandrade.cursomc.api.model.Endereco;
 import com.wagnerandrade.cursomc.api.model.dto.ClienteDTO;
 import com.wagnerandrade.cursomc.api.model.dto.ClienteNewDTO;
+import com.wagnerandrade.cursomc.api.model.enums.Perfil;
 import com.wagnerandrade.cursomc.api.model.enums.TipoCliente;
 import com.wagnerandrade.cursomc.api.repositories.ClienteRepository;
 import com.wagnerandrade.cursomc.api.repositories.EnderecoRepository;
+import com.wagnerandrade.cursomc.api.security.UserSS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -41,6 +44,11 @@ public class ClienteService {
     private S3Service s3Service;
 
     public Cliente getById(Long id) {
+        UserSS user = UserService.authenticated();
+        if(user == null || user.hasRole(Perfil.ADMIN) && ! id.equals(user.getId())){
+            throw new AuthorizationException("Acesso negado");
+        }
+
         return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
     }
 
@@ -104,6 +112,18 @@ public class ClienteService {
     }
 
     public URI uploadProfilePicture(MultipartFile multipartFile) {
-        return this.s3Service.uploadFile(multipartFile);
+        UserSS user = UserService.authenticated();
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        URI uri = this.s3Service.uploadFile(multipartFile);
+
+        Cliente cli = this.repository.findById(user.getId()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
+
+        cli.setImgUrl(uri.toString());
+        this.repository.save(cli);
+
+        return uri;
     }
 }
