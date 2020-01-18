@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -72,6 +73,12 @@ public class ClienteController {
             @RequestParam(value = "direction", defaultValue = "ASC") String direction,
             @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy) {
         return ResponseEntity.ok().body(this.service.findPage(page, linesPerPage, direction, orderBy));
+    }
+
+    @PostMapping(value = "/picture")
+    public ResponseEntity uploadProfilePictury(@RequestParam(name = "file") MultipartFile file) {
+        URI uri = this.service.uploadProfilePicture(file);
+        return ResponseEntity.created(uri).build();
     }
 
 }

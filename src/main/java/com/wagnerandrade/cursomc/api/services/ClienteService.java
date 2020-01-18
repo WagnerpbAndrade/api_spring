@@ -1,5 +1,6 @@
 package com.wagnerandrade.cursomc.api.services;
 
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import com.wagnerandrade.cursomc.api.model.Cidade;
@@ -18,7 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,9 @@ public class ClienteService {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private S3Service s3Service;
 
     public Cliente getById(Long id) {
         return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
@@ -95,5 +101,9 @@ public class ClienteService {
     private void updateData(Cliente newObj, Cliente categoria) {
         newObj.setNome(categoria.getNome());
         newObj.setEmail(categoria.getEmail());
+    }
+
+    public URI uploadProfilePicture(MultipartFile multipartFile) {
+        return this.s3Service.uploadFile(multipartFile);
     }
 }
