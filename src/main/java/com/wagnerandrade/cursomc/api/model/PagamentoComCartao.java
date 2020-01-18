@@ -3,11 +3,14 @@ package com.wagnerandrade.cursomc.api.model;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.wagnerandrade.cursomc.api.model.enums.EstadoPagamento;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 
 @Entity
-@Data
+@Getter
+@Setter
 @JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 
