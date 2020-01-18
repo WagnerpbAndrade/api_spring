@@ -15,6 +15,7 @@ import com.wagnerandrade.cursomc.api.repositories.ClienteRepository;
 import com.wagnerandrade.cursomc.api.repositories.EnderecoRepository;
 import com.wagnerandrade.cursomc.api.security.UserSS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +44,12 @@ public class ClienteService {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Value("${img.prefix.client.profile}")
+    private String prefix;
 
     public Cliente getById(Long id) {
         UserSS user = UserService.authenticated();
@@ -117,13 +125,9 @@ public class ClienteService {
             throw new AuthorizationException("Acesso negado");
         }
 
-        URI uri = this.s3Service.uploadFile(multipartFile);
+        BufferedImage jpgImage = this.imageService.getJpgImageFromFile(multipartFile);
+        String fileName = prefix + user.getId() + ".jpg";
 
-        Cliente cli = this.repository.findById(user.getId()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
-
-        cli.setImgUrl(uri.toString());
-        this.repository.save(cli);
-
-        return uri;
+        return this.s3Service.uploadFile(this.imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
     }
 }

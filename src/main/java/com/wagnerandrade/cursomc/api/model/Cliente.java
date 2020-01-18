@@ -30,8 +30,6 @@ public class Cliente implements Serializable {
     private String cpfOuCnpj;
     private Integer tipo;
 
-    private String imgUrl;
-
     @JsonIgnore
     private String senha;
 
