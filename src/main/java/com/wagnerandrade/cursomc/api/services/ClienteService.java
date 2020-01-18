@@ -1,6 +1,5 @@
 package com.wagnerandrade.cursomc.api.services;
 
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.AuthorizationException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
@@ -56,15 +55,29 @@ public class ClienteService {
 
     public Cliente getById(Long id) {
         UserSS user = UserService.authenticated();
-        if(user == null || user.hasRole(Perfil.ADMIN) && ! id.equals(user.getId())){
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
             throw new AuthorizationException("Acesso negado");
         }
 
-        return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
+        return this.repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
+                "Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + Cliente.class.getName()
+        ));
     }
 
     public Cliente getByEmail(String email) {
-        return this.repository.findByEmail(email);
+        UserSS user = UserService.authenticated();
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        Cliente obj = this.repository.findByEmail(email);
+        if (obj == null) {
+            throw new ObjectNotFoundException(
+                    "Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + Cliente.class.getName()
+            );
+        }
+
+        return obj;
     }
 
     public List<ClienteDTO> getAll() {
@@ -86,7 +99,7 @@ public class ClienteService {
     }
 
     public void delete(Long id) {
-        try{
+        try {
             this.repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionadas");
@@ -108,10 +121,10 @@ public class ClienteService {
         Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
         cli.getEnderecos().add(end);
         cli.getTelefones().add(objDto.getTelefone1());
-        if (objDto.getTelefone2()!=null) {
+        if (objDto.getTelefone2() != null) {
             cli.getTelefones().add(objDto.getTelefone2());
         }
-        if (objDto.getTelefone3()!=null) {
+        if (objDto.getTelefone3() != null) {
             cli.getTelefones().add(objDto.getTelefone3());
         }
         return cli;

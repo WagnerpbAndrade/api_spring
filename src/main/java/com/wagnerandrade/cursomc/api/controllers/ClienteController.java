@@ -26,6 +26,11 @@ public class ClienteController {
         return ResponseEntity.ok(this.service.getById(id));
     }
 
+    @GetMapping(value = "/email")
+    public ResponseEntity getByEmail(@RequestParam(value = "value") String email) {
+        return ResponseEntity.ok().body(this.service.getByEmail(email));
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping()
     public ResponseEntity getAll() {
