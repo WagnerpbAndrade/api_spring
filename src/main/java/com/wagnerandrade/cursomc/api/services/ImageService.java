@@ -2,6 +2,7 @@ package com.wagnerandrade.cursomc.api.services;
 
 import com.wagnerandrade.cursomc.api.cotrollers.exception.FileException;
 import org.apache.commons.io.FilenameUtils;
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +19,7 @@ public class ImageService {
 
     public BufferedImage getJpgImageFromFile(MultipartFile uploadedFile) {
         String ext = FilenameUtils.getExtension(uploadedFile.getOriginalFilename());
-        if (! "png".equals(ext) && ! "jpg".equals(ext)) {
+        if (!"png".equals(ext) && !"jpg".equals(ext)) {
             throw new FileException("Somente imagens PNG e JPG são permitidas");
         }
 
@@ -50,6 +51,20 @@ public class ImageService {
         } catch (IOException e) {
             throw new FileException("Erro ao ler arquivo");
         }
+    }
+
+    public BufferedImage cropSquare(BufferedImage sourceImage) {
+        int min = (sourceImage.getHeight() <= sourceImage.getWidth()) ? sourceImage.getHeight() : sourceImage.getWidth();
+        return Scalr.crop(
+                sourceImage,
+                (sourceImage.getWidth() / 2) - (min / 2),
+                (sourceImage.getHeight() / 2) - (min / 2),
+                min,
+                min);
+    }
+
+    public BufferedImage resize(BufferedImage sourceImage, int size) {
+        return Scalr.resize(sourceImage, Scalr.Method.ULTRA_QUALITY, size);
     }
 
 }
