@@ -1,7 +1,11 @@
 package com.wagnerandrade.cursomc.api.services.exception;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.AuthorizationException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.DataIntegrityException;
+import com.wagnerandrade.cursomc.api.cotrollers.exception.FileException;
 import com.wagnerandrade.cursomc.api.cotrollers.exception.ObjectNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -61,32 +65,32 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 
-//    @ExceptionHandler(FileException.class)
-//    public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request) {
-//
-//        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Erro de arquivo", e.getMessage(), request.getRequestURI());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-//    }
-//
-//    @ExceptionHandler(AmazonServiceException.class)
-//    public ResponseEntity<StandardError> amazonService(AmazonServiceException e, HttpServletRequest request) {
-//
-//        HttpStatus code = HttpStatus.valueOf(e.getErrorCode());
-//        StandardError err = new StandardError(System.currentTimeMillis(), code.value(), "Erro Amazon Service", e.getMessage(), request.getRequestURI());
-//        return ResponseEntity.status(code).body(err);
-//    }
-//
-//    @ExceptionHandler(AmazonClientException.class)
-//    public ResponseEntity<StandardError> amazonClient(AmazonClientException e, HttpServletRequest request) {
-//
-//        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Erro Amazon Client", e.getMessage(), request.getRequestURI());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-//    }
-//
-//    @ExceptionHandler(AmazonS3Exception.class)
-//    public ResponseEntity<StandardError> amazonS3(AmazonS3Exception e, HttpServletRequest request) {
-//
-//        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Erro S3", e.getMessage(), request.getRequestURI());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-//    }
+    @ExceptionHandler(FileException.class)
+    public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Erro de arquivo", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(AmazonServiceException.class)
+    public ResponseEntity<StandardError> amazonService(AmazonServiceException e, HttpServletRequest request) {
+
+        HttpStatus code = HttpStatus.valueOf(e.getErrorCode());
+        StandardError err = new StandardError(System.currentTimeMillis(), code.value(), "Erro Amazon Service", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(code).body(err);
+    }
+
+    @ExceptionHandler(AmazonClientException.class)
+    public ResponseEntity<StandardError> amazonClient(AmazonClientException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Erro Amazon Client", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(AmazonS3Exception.class)
+    public ResponseEntity<StandardError> amazonS3(AmazonS3Exception e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Erro S3", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
 }
