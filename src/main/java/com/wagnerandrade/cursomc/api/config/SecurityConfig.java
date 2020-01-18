@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] PUBLIC_MATCHERS_GET = {
             "/api/v1/produtos/**",
             "/api/v1/categorias/**",
+            "/api/v1/estados/**"
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
